@@ -1,0 +1,123 @@
+/* ===== Admin molecules ===== */
+
+/* PageHeader */
+.m-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.m-page-header__before {
+  font-size: var(--font-size-sm);
+}
+
+.m-page-header__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.m-page-header__title {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+}
+
+.m-page-header__badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.m-page-header__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+/* CopyField */
+.m-copy-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.m-copy-field__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.m-copy-field__value {
+  flex: 1;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  background: var(--color-surface-muted);
+}
+
+/* Toast */
+.m-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: var(--size-content);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.m-toast--success { background: var(--color-success); }
+.m-toast--error { background: var(--color-danger); }
+
+.m-toast .a-button--icon {
+  color: inherit;
+}
+
+/* MetaList */
+.m-meta-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.m-meta-list__item {
+  display: grid;
+  grid-template-columns: var(--size-meta-label) 1fr;
+  gap: var(--space-2);
+}
+
+.m-meta-list dt {
+  color: var(--color-text-muted);
+}
+
+.m-meta-list dd {
+  margin: 0;
+}
+
+/* ErrorList */
+.m-error-list {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-difficulty-yellow);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+}
+
+.m-error-list--error {
+  border-color: var(--color-danger);
+  background: var(--color-danger-surface);
+}
+
+.m-error-list__title {
+  font-weight: var(--font-weight-bold);
+}
+
+.m-error-list__items {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-5);
+}

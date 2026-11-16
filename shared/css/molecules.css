@@ -1,0 +1,78 @@
+/* ===== Shared molecules ===== */
+
+/* Field (also used by SubjectPicker and ImagePicker in Match Word) */
+.m-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.m-field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.m-field__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.m-field__hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.m-field__error {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+}
+
+/* Message */
+.m-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--size-paste-zone);
+  margin: var(--space-8) auto;
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.m-message__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.m-message__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.m-message--error {
+  border-color: var(--color-danger);
+  background: var(--color-danger-surface);
+}
+
+.m-message--success {
+  border-color: var(--color-success);
+  background: var(--color-success-surface);
+}
+
+.m-message--loading .m-message__title {
+  color: var(--color-text-muted);
+}
+
+.m-message__action {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-2);
+}

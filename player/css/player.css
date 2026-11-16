@@ -1,0 +1,9 @@
+/* The player page (play.html). Module styles are added by moduleLoader.js. */
+@import url("../../shared/css/shared.css");
+@import url("molecules.css");
+@import url("organisms.css");
+@import url("templates.css");
+
+#app {
+  height: 100%;
+}

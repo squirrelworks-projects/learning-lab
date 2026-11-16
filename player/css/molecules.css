@@ -1,0 +1,11 @@
+/* ===== Player molecules ===== */
+
+/* PreviewNotice */
+.m-preview-notice {
+  padding: var(--space-1) var(--space-4);
+  background: var(--color-difficulty-yellow);
+  color: var(--color-difficulty-yellow-text);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}

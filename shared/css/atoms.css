@@ -1,0 +1,157 @@
+/* ===== Shared atoms ===== */
+
+/* Icon */
+.a-icon {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Button */
+.a-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.a-button--primary {
+  background: var(--color-brand);
+  color: var(--color-brand-contrast);
+}
+
+.a-button--primary:hover:not(:disabled) {
+  background: var(--color-brand-hover);
+}
+
+.a-button--ghost {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.a-button--ghost:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+}
+
+.a-button--danger {
+  background: var(--color-danger);
+  color: var(--color-brand-contrast);
+}
+
+.a-button--danger:hover:not(:disabled) {
+  background: var(--color-text);
+}
+
+.a-button--icon {
+  padding: var(--space-2);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.a-button--icon:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+}
+
+.a-button:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-muted);
+  background: var(--color-surface-muted);
+}
+
+.a-button--icon:disabled {
+  background: transparent;
+  opacity: 0.4;
+}
+
+/* Select */
+.a-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+}
+
+/* TextInput, TextArea */
+.a-input,
+.a-textarea {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.a-textarea {
+  resize: vertical;
+  line-height: var(--line-height-base);
+}
+
+.a-input--invalid {
+  border-color: var(--color-danger);
+}
+
+/* Checkbox */
+.a-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.a-checkbox__input {
+  width: var(--space-4);
+  height: var(--space-4);
+  margin: 0;
+  accent-color: var(--color-brand);
+}
+
+/* DifficultyBadge */
+.a-difficulty {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}
+
+.a-difficulty--compact {
+  padding: 0 var(--space-2);
+}
+
+.a-difficulty__dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+
+.a-difficulty--green { background: var(--color-difficulty-green); color: var(--color-difficulty-green-text); }
+.a-difficulty--yellow { background: var(--color-difficulty-yellow); color: var(--color-difficulty-yellow-text); }
+.a-difficulty--red { background: var(--color-difficulty-red); color: var(--color-difficulty-red-text); }
+.a-difficulty--black { background: var(--color-difficulty-black); color: var(--color-difficulty-black-text); }

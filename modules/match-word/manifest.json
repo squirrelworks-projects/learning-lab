@@ -1,0 +1,9 @@
+{
+  "key": "match-word",
+  "name": "Match Word",
+  "description": "Students drag technical terms onto a screenshot of a web page and place them on the right parts.",
+  "schemaVersion": 1,
+  "styles": [
+    "css/match-word.css"
+  ]
+}
