@@ -14,10 +14,9 @@ RedirectMatch 404 /(database|tools)(/|$)
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "same-origin"
 
-  # The player may only be embedded by our Moodle. CHANGE https://moodle.example.dk to your Moodle address
-  # (several addresses: separate them with spaces).
+  # The player may only be embedded by our Moodle (several addresses: separate them with spaces).
   <Files "play.html">
-    Header always set Content-Security-Policy "frame-ancestors 'self' https://moodle.example.dk"
+    Header always set Content-Security-Policy "frame-ancestors 'self' https://moodle.techcollege.dk"
   </Files>
 </IfModule>
 
