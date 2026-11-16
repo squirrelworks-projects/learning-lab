@@ -1,0 +1,54 @@
+/* ===== Match Word templates ===== */
+
+/* WorkspaceLayout */
+.t-workspace {
+  display: grid;
+  grid-template-columns: var(--size-sidebar) 1fr;
+  grid-template-rows: var(--size-toolbar) 1fr;
+  grid-template-areas:
+    "sidebar toolbar"
+    "sidebar stage";
+  height: 100%;
+}
+
+.t-workspace__sidebar {
+  grid-area: sidebar;
+  overflow-x: hidden; /* hidden tooltips must not create a horizontal scrollbar */
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.t-workspace__toolbar {
+  grid-area: toolbar;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.t-workspace__stage {
+  grid-area: stage;
+  min-width: 0;
+  min-height: 0; /* lets the stage scroll instead of growing the grid */
+}
+
+/* EditorLayout (editor in the admin) */
+.t-mw-editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "general images"
+    "subjects subjects";
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.t-mw-editor__general { grid-area: general; }
+.t-mw-editor__images { grid-area: images; }
+.t-mw-editor__subjects { grid-area: subjects; }
+
+@media (max-width: 60rem) {
+  .t-mw-editor {
+    grid-template-columns: 1fr;
+    grid-template-areas: "general" "images" "subjects";
+  }
+}

@@ -1,0 +1,116 @@
+# Checks every pull request and push. A push to main that passes is deployed to simply.com straight away.
+# Documented on the Deployment wiki page. Needed settings (GitHub → Settings → Secrets and variables → Actions):
+#   secrets:   SSH_PRIVATE_KEY (the deploy key), SSH_USER (simply.com FTP/SSH username)
+#   variables: DEPLOY_PATH (site root on the server), SITE_URL (https://learninglab.example.dk)
+#              optional: REMOTE_PHP (PHP command on the server, default "php")
+name: Check and deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: # "Run workflow" button: re-deploys the chosen branch/commit (main only)
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.5'] # the oldest supported version, and what simply.com runs
+    name: check (PHP ${{ matrix.php }})
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: learninglab
+          MARIADB_USER: ll
+          MARIADB_PASSWORD: llpass
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_mysql, fileinfo, mbstring
+          tools: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: PHP syntax
+        run: find api database dev-router.php -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: JavaScript syntax
+        run: for f in $(git ls-files '*.js'); do node --check "$f"; done
+
+      - name: JavaScript imports resolve
+        run: node tools/check-imports.mjs $(git ls-files '*.js')
+
+      - name: Wiki is up to date (coverage check)
+        run: |
+          git clone --depth 1 "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git" .wiki
+          bash tools/check-wiki.sh | tee coverage.txt
+          if [ -s coverage.txt ]; then echo "::error::The wiki is missing the items above. Update and push the wiki first."; exit 1; fi
+
+      - name: Database migrations and API tests
+        env:
+          LEARNING_LAB_CONFIG: ${{ runner.temp }}/config.php
+        run: |
+          cat > "$LEARNING_LAB_CONFIG" <<'PHP'
+          <?php return ['db' => ['dsn' => 'mysql:host=127.0.0.1;port=3306;dbname=learninglab;charset=utf8mb4', 'user' => 'll', 'password' => 'llpass'], 'debug' => true];
+          PHP
+          php database/migrate.php
+          php database/migrate.php   # a second run must change nothing
+          php -S 127.0.0.1:8000 dev-router.php > php-server.log 2>&1 &
+          sleep 1
+          bash tools/api-test.sh http://127.0.0.1:8000 || { cat php-server.log; exit 1; }
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -t ed25519,rsa ssh.simply.com >> ~/.ssh/known_hosts
+
+      - name: Upload and migrate
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+          REMOTE_PHP: ${{ vars.REMOTE_PHP || 'php' }}
+        run: SSH_KEY_FILE="$HOME/.ssh/deploy_key" bash tools/deploy.sh
+
+      - name: Smoke test the live site
+        if: vars.SITE_URL != ''
+        run: |
+          curl -fsS "${{ vars.SITE_URL }}/api/auth/me" | grep -q '"user"'
+          curl -fsS -o /dev/null "${{ vars.SITE_URL }}/play.html"
+          curl -fsS -o /dev/null "${{ vars.SITE_URL }}/admin/"
+          code=$(curl -s -o /dev/null -w '%{http_code}' "${{ vars.SITE_URL }}/database/schema.sql")
+          [ "$code" != 200 ] || { echo "::error::database/schema.sql is publicly readable"; exit 1; }
+          echo "Live site OK"

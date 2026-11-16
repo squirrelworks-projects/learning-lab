@@ -1,0 +1,32 @@
+# Learning Lab – Apache settings for the site root (simply.com). See the Deployment page in the wiki.
+Options -Indexes
+DirectoryIndex index.html
+
+# Files that must never be served
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.wiki
+RedirectMatch 404 /(database|tools)(/|$)
+<FilesMatch "\.(md|sql|sh|log)$|^(dev-router\.php|CLAUDE\.md|REVISION)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+
+  # The player may only be embedded by our Moodle. CHANGE https://moodle.example.dk to your Moodle address
+  # (several addresses: separate them with spaces).
+  <Files "play.html">
+    Header always set Content-Security-Policy "frame-ancestors 'self' https://moodle.example.dk"
+  </Files>
+</IfModule>
+
+# Module and shared code changes should reach students quickly.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/javascript "access plus 5 minutes"
+  ExpiresByType application/javascript "access plus 5 minutes"
+  ExpiresByType text/css "access plus 5 minutes"
+  ExpiresByType application/json "access plus 0 seconds"
+</IfModule>

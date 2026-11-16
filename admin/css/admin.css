@@ -1,0 +1,10 @@
+/* The teacher admin (admin/index.html). Module editor styles are added by moduleLoader.js. */
+@import url("../../shared/css/shared.css");
+@import url("atoms.css");
+@import url("molecules.css");
+@import url("organisms.css");
+@import url("templates.css");
+
+#app {
+  min-height: 100%;
+}

@@ -1,0 +1,13 @@
+# Local clone of the GitHub wiki (its own git repo: learning-lab.wiki.git)
+.wiki/
+
+# Config with database passwords – never commit
+api/config.php
+learning-lab.config.php
+
+# Uploaded images (back them up from the server, not git)
+media/*
+!media/.htaccess
+
+# Written by tools/deploy.sh
+REVISION

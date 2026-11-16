@@ -1,0 +1,98 @@
+/* ===== Admin templates ===== */
+
+/* AdminLayout */
+.t-admin__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-tooltip);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.t-admin__main {
+  max-width: var(--size-content);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+.t-admin__main:focus {
+  outline: none;
+}
+
+.t-admin__toast {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  z-index: var(--z-tooltip);
+  transform: translateX(-50%);
+}
+
+/* CenteredLayout */
+.t-centered {
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  padding: var(--space-4);
+}
+
+.t-centered__card {
+  width: 100%;
+  max-width: var(--size-form);
+  padding: var(--space-7);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+/* ListLayout */
+.t-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.t-list__panel:empty,
+.t-list__filters:empty {
+  display: none;
+}
+
+/* EditLayout */
+.t-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-areas:
+    "header header"
+    "form side"
+    "body body";
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.t-edit__header { grid-area: header; }
+.t-edit__side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.t-edit__body { grid-area: body; }
+
+.t-edit__form {
+  grid-area: form;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.t-edit__section-title {
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-lg);
+}
+
+@media (max-width: 60rem) {
+  .t-edit {
+    grid-template-columns: 1fr;
+    grid-template-areas: "header" "form" "side" "body";
+  }
+}

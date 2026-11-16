@@ -1,0 +1,6 @@
+/* Match Word styles. Loaded by the player (and the admin editor) after shared/css/shared.css.
+   Only one module's CSS is loaded at a time. */
+@import url("atoms.css");
+@import url("molecules.css");
+@import url("organisms.css");
+@import url("templates.css");

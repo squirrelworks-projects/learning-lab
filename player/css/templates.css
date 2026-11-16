@@ -1,0 +1,21 @@
+/* ===== Player templates ===== */
+
+/* PlayerLayout */
+.t-player {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.t-player__header {
+  flex-shrink: 0;
+}
+
+.t-player__module {
+  flex: 1;
+  min-height: 0;
+}
+
+.t-player [hidden] {
+  display: none;
+}

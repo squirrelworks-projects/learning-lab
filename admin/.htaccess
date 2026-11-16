@@ -1,0 +1,5 @@
+# The teacher admin may not be embedded in other sites (clickjacking protection).
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "frame-ancestors 'self'"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>

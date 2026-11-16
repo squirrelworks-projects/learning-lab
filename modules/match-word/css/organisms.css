@@ -1,0 +1,169 @@
+/* ===== Match Word organisms ===== */
+
+/* Sidebar */
+.o-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.o-sidebar__title {
+  font-size: var(--font-size-lg);
+}
+
+.o-sidebar__hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.o-sidebar__error {
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}
+
+.o-sidebar__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Toolbar */
+.o-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 100%;
+  padding: 0 var(--space-4);
+}
+
+.o-toolbar__title {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--font-size-lg);
+  color: var(--color-brand);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.o-toolbar .a-button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Takes the free space between the picker and the buttons (also acts as the spacer). */
+.o-toolbar__notice {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+  color: var(--color-danger);
+}
+
+/* Stage */
+.o-stage {
+  height: 100%;
+  overflow: auto;
+  padding: var(--space-4);
+  background: var(--color-surface-stage);
+  transition: background var(--duration-fast);
+}
+
+.o-stage--drop-active {
+  background: var(--color-drop-target);
+}
+
+.o-stage__canvas {
+  position: relative;
+  z-index: var(--z-stage);
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  box-shadow: var(--shadow-md);
+}
+
+.o-stage__layer {
+  position: absolute;
+  inset: 0;
+}
+
+.o-sidebar__instructions {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-info-surface);
+  font-size: var(--font-size-sm);
+}
+
+/* EditorGeneral, EditorImages, EditorSubjects (editor) */
+.o-mw-editor-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.o-mw-editor-section__title {
+  font-size: var(--font-size-lg);
+}
+
+.o-mw-editor-section__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.o-mw-editor-section__empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.o-mw-editor-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.o-mw-editor-section__actions .a-select {
+  width: auto;
+}
+
+.o-mw-subject {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+}
+
+.o-mw-subject__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.o-mw-subject__head .a-input {
+  font-weight: var(--font-weight-bold);
+}
+
+.o-mw-subject__terms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
