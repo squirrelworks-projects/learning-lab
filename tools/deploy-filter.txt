@@ -1,0 +1,19 @@
+# rsync filter for tools/deploy.sh: what is NOT uploaded to the server.
+# Excluded paths are also never deleted on the server by --delete, so uploads and the config are safe.
+# Keep the media folder's .htaccess, but never touch uploaded images.
++ /media/.htaccess
+- /media/*
+# Server-only config with the database password
+- /api/config.php
+- /learning-lab.config.php
+# Development files
+- /.git/
+- /.github/
+- /.wiki/
+- /tools/
+- /dev-router.php
+- /CLAUDE.md
+- /README.md
+- /.gitignore
+- .DS_Store
+- Thumbs.db
