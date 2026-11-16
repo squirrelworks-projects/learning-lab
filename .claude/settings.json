@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull --ff-only:*)",
+      "Bash(git switch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push -u origin HEAD)",
+      "Bash(git push)",
+      "Bash(git -C .wiki status:*)",
+      "Bash(git -C .wiki diff:*)",
+      "Bash(git -C .wiki pull:*)",
+      "Bash(git -C .wiki add:*)",
+      "Bash(git -C .wiki commit:*)",
+      "Bash(git -C .wiki push)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(bash tools/check-wiki.sh)",
+      "Bash(node tools/check-imports.mjs:*)",
+      "Bash(php -l:*)"
+    ],
+    "ask": [
+      "Bash(gh pr merge:*)",
+      "Bash(git revert:*)",
+      "Bash(git reset:*)",
+      "Bash(git rebase:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin main:*)",
+      "Bash(git push origin HEAD:main:*)",
+      "Bash(gh pr merge --admin:*)",
+      "Bash(gh pr merge:* --admin:*)",
+      "Read(./api/config.php)",
+      "Read(./learning-lab.config.php)",
+      "Read(~/.ssh/**)"
+    ]
+  }
+}
