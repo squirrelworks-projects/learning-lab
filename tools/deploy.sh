@@ -28,8 +28,22 @@ SSH=(ssh -p "$SSH_PORT" -o BatchMode=yes)
 # Record what is deployed (blocked from the web by .htaccess)
 echo "$(git rev-parse --verify -q HEAD || echo unknown) $(date -u +%Y-%m-%dT%H:%M:%SZ)" > REVISION
 
+case "$DEPLOY_PATH" in
+  /*/*) ;; # absolute, at least two levels deep
+  *) echo "DEPLOY_PATH must be an absolute path like /var/www/learninglab.example.dk/public_html (got '$DEPLOY_PATH')" >&2; exit 1 ;;
+esac
+
+# Safety: the web hotel hosts other sites. rsync --delete must never run on a folder that belongs to
+# something else, so only deploy into an empty folder or one that already holds Learning Lab (play.html).
+echo "→ Checking $REMOTE:$DEPLOY_PATH"
+"${SSH[@]}" "$REMOTE" "set -e
+  if [ -d '$DEPLOY_PATH' ] && [ -n \"\$(ls -A '$DEPLOY_PATH' 2>/dev/null)\" ] && [ ! -f '$DEPLOY_PATH/play.html' ]; then
+    echo 'Refusing to deploy: $DEPLOY_PATH is not empty and is not a Learning Lab site (no play.html). Check DEPLOY_PATH.' >&2
+    exit 1
+  fi
+  mkdir -p '$DEPLOY_PATH/media'"
+
 echo "→ Uploading to $REMOTE:$DEPLOY_PATH"
-"${SSH[@]}" "$REMOTE" "mkdir -p '$DEPLOY_PATH/media'"
 rsync -rlz --delete --chmod=D755,F644 --filter="merge tools/deploy-filter.txt" \
   -e "${SSH[*]}" ./ "$REMOTE:$DEPLOY_PATH/"
 
