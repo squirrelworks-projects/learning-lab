@@ -18,6 +18,11 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.5'] # the oldest supported version, and what simply.com runs
+    name: check (PHP ${{ matrix.php }})
     services:
       mariadb:
         image: mariadb:10.11
@@ -35,7 +40,7 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1' # the oldest supported version
+          php-version: ${{ matrix.php }}
           extensions: pdo_mysql, fileinfo, mbstring
           tools: none
 
