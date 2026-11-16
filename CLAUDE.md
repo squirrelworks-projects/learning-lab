@@ -65,15 +65,46 @@ git -C .wiki add -A && git -C .wiki commit -m "<what changed>" && git -C .wiki p
 ```
 The wiki is published as soon as it's pushed, so pushing it is part of the task. Commit and push the **code** repo only when the user asks.
 
-### 4. Git workflow
-`main` is production: **every push to `main` that passes the checks is deployed to simply.com straight away** (`.github/workflows/check-and-deploy.yml`). So:
-- Never commit directly to `main`. Work on a short branch from `main`: `feature/<what>`, `fix/<what>`, `docs/<what>` or `chore/<what>`.
-- Commit messages follow Conventional Commits: `feat: …`, `fix: …`, `docs: …`, `refactor: …`, `test: …`, `chore: …`, `ci: …`. Imperative, ≤ 72 characters in the subject; the body explains why.
-- One logical change per commit. Never commit `api/config.php`, `learning-lab.config.php`, uploaded images in `media/` or `REVISION` (all in `.gitignore`).
-- Push the **wiki first**, then push the branch and open a pull request to `main` (the template has the checklist). The `check` job runs PHP/JS syntax checks, the import check, the wiki coverage check, the migrations and `tools/api-test.sh`. A red check blocks the merge.
-- Merge with **squash and merge**, so `main` has one commit per pull request. Delete the branch afterwards.
-- Commit and push only when the user asks. If git can't push from the session (no GitHub login), commit on the branch and tell the user the exact `git push` command.
-- To roll back: revert the pull request's commit on GitHub (*Revert* button), which opens a new pull request; merging it deploys the old code. Database migrations are not undone automatically: write a new migration that reverses the change.
+### 4. Git workflow and deploying
+`main` is production: **every push to `main` that passes the checks is deployed to https://learninglab.nicolaisen.digital straight away** (`.github/workflows/check-and-deploy.yml`, see the Deployment wiki page). Claude Code works on the user's machine with the user's git login and the GitHub CLI (`gh`), and runs every step below itself, **except the merge, which always needs the user's OK** (merging = deploying to students).
+
+**Every fix or feature, step by step:**
+1. **Start from a fresh `main`:**
+   ```bash
+   git switch main && git pull --ff-only && git -C .wiki pull
+   git switch -c <type>/<short-name>      # feature/…, fix/…, docs/…, chore/…
+   ```
+2. **Change, test and document:** sections 1–3 and 5. Before committing, both of these must print nothing / "all imports ok":
+   ```bash
+   bash tools/check-wiki.sh
+   node tools/check-imports.mjs $(git ls-files '*.js')
+   ```
+3. **Commit** in small logical commits with Conventional Commit messages (`feat: …`, `fix: …`, `docs: …`, `refactor: …`, `test: …`, `chore: …`, `ci: …`; imperative, ≤ 72 characters; the body explains why). Commit the wiki changes in `.wiki/` too.
+4. **Push the wiki first** (the checks read it): `git -C .wiki push`
+5. **Push the branch and open a pull request:**
+   ```bash
+   git push -u origin HEAD
+   gh pr create --base main --title "<conventional title>" --body "<what and why + the template checklist, ticked>"
+   ```
+6. **Wait for the checks:** `gh pr checks --watch`. Both `check (PHP 8.1)` and `check (PHP 8.5)` must pass. If one fails: `gh run view --log-failed`, fix, commit, push, and watch again. Never merge with a red check.
+7. **Ask the user before merging.** Give the pull request link and a short summary of what will change for teachers and students. Only after a clear yes:
+   ```bash
+   gh pr merge --squash --delete-branch
+   ```
+8. **Follow the deploy:**
+   ```bash
+   gh run list --branch main --limit 1          # note the run id
+   gh run watch <run-id> --exit-status
+   ```
+   It must end with the deploy job green ("Live site OK"). If the deploy fails: `gh run view <run-id> --log-failed`, explain it to the user, and fix it with a new branch and pull request.
+9. **Back to `main`:** `git switch main && git pull --ff-only`, and tell the user it is live.
+
+**Rules:**
+- Never commit or push to `main` directly, never `git push --force` to `main`, never merge with `--admin` or a red check. These are also blocked in `.claude/settings.json`.
+- Never commit `api/config.php`, `learning-lab.config.php`, uploaded images in `media/`, `REVISION` or any password or key (all in `.gitignore`). Never read or print the server config or SSH keys.
+- If the user only wants the change prepared (“don't deploy yet”), stop after step 6 and leave the pull request open.
+- If `gh` says it isn't logged in, ask the user to run `gh auth login` in the terminal. Don't work around it.
+- **Rollback:** `gh pr list --state merged --limit 5` to find the pull request, then make a new branch with `git revert <merge-commit>`, and go through steps 4–9 (with the user's OK). Database migrations are not undone by a revert: write a new migration that reverses the change.
 
 ### 5. Test before saying it works
 - API: run it locally (`php -S localhost:8000 dev-router.php` with a local database) and call the routes you changed. On an empty, migrated database, `bash tools/api-test.sh http://localhost:8000` must pass; add checks to it for new routes.
